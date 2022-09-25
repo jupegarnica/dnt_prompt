@@ -1,6 +1,7 @@
 {
     "tasks": {
         "dev":"deno run -A --unstable --watch ./main.ts",
-        "version":"deno run  -A https://deno.land/x/version/index.ts"
+        "version":"deno run  -A https://deno.land/x/version/index.ts",
+        "release": "deno task version path && git push --follow-tags origin main"
     }
 }
