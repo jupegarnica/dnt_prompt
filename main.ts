@@ -1,4 +1,4 @@
-import prompts from "npm:prompts";
+// import prompts from "npm:prompts";
 
 import { build } from "https://deno.land/x/dnt@0.30.0/mod.ts";
 
@@ -7,6 +7,7 @@ import {
   resolve,
 } from "https://deno.land/std@0.157.0/path/mod.ts";
 
+const promps = await import("npm:prompts");
 
 const saved = JSON.parse(localStorage.getItem("package.json") || "{}");
 // console.log(saved);
