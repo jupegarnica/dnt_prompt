@@ -1,5 +1,6 @@
 {
     "tasks": {
-        "dev":"deno run -A --unstable --watch ./main.ts"
+        "dev":"deno run -A --unstable --watch ./main.ts",
+        "version":"deno run  -A https://deno.land/x/version/index.ts"
     }
 }
