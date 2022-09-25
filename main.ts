@@ -5,11 +5,11 @@ import { build } from "https://deno.land/x/dnt@0.30.0/mod.ts";
 import {
   dirname,
   resolve,
-} from "https://deno.land/std@0.129.0/path/mod.ts";
+} from "https://deno.land/std@0.157.0/path/mod.ts";
 
 
 const saved = JSON.parse(localStorage.getItem("package.json") || "{}");
-console.log(saved);
+// console.log(saved);
 const format = (arr: string[]) => arr;
 
 
