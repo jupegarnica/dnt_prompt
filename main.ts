@@ -1,21 +1,42 @@
 // import prompts from "npm:prompts";
 
-import { build } from "https://deno.land/x/dnt@0.30.0/mod.ts";
+import { build, type BuildOptions } from "https://deno.land/x/dnt@0.30.0/mod.ts";
 
 import {
   dirname,
   resolve,
 } from "https://deno.land/std@0.157.0/path/mod.ts";
 
-const promps = await import("npm:prompts");
-
+// const prompts = await import("npm:prompts");
+// localStorage.removeItem("package.json")
+const baseDir = resolve(Deno.cwd(), ".");
 const saved = JSON.parse(localStorage.getItem("package.json") || "{}");
 // console.log(saved);
-const format = (arr: string[]) => arr;
+
+
+type Question = {
+  type: 'text' | 'list' | 'confirm' | 'number' | 'invisible';
+  name: string;
+  message: string;
+  separator?: string;
+  initial?: string;
+};
+
+const prompts = (questions: Question[]) => {
+  const answers = {} as Record<string, string>;
+  for (const question of questions) {
+    const answer: string = prompt(question.message, question.initial) || '';
+    answers[question.name] = answer;
+  }
+  return answers;
+};
+
+
+
+
 
 
 const questions = [
-
   {
     type: 'text',
     name: "name",
@@ -89,8 +110,7 @@ const questions = [
     separator: ',',
     name: "keywords",
     message: "Keywords?",
-    initial: saved.keywords || [],
-    format
+    initial: saved.keywords || '',
 
 
 
@@ -100,35 +120,34 @@ const questions = [
     separator: ',',
     name: "entryPoints",
     message: "entryPoints?",
-    initial: saved.entryPoints || ["mod.ts"],
-    format
+    initial: saved.entryPoints || "main.ts",
   },
   {
     type: 'list',
     separator: ',',
     name: "copy-files",
     message: "Copy files?",
-    initial: saved["copy-files"] || ["README.md", "LICENSE"],
-    format
+    initial: saved["copy-files"] || "README.md, LICENSE",
   },
   {
     type: 'text',
     name: "output-dir",
     message: "Output directory?",
     initial: saved["output-dir"] || '.npm',
-    format
   },
 ];
 
-const response = await prompts(questions);
+const response = prompts(questions as Question[]);
 
 localStorage.setItem('package.json', JSON.stringify(response));
 
 
-const baseDir = resolve(dirname(Deno.cwd()), ".");
 
-await build({
-  entryPoints: response.entryPoints?.map((e) => resolve(baseDir, e)) || [],
+
+const entryPoints = response.entryPoints.split(",").map((s) => s.trim());
+
+const buildOptions: BuildOptions = {
+  entryPoints: entryPoints.map((e) => resolve(baseDir, e)) || [],
   outDir: resolve(baseDir, response["output-dir"]),
   test: true,
   compilerOptions: {
@@ -163,16 +182,22 @@ await build({
     },
     keywords: response.keywords,
   },
-});
+}
 
-Deno.copyFileSync(
-  resolve(baseDir, "README.md"),
-  resolve(baseDir, response["output-dir"], "README.md"),
-);
-Deno.copyFileSync(
-  resolve(baseDir, "LICENSE"),
-  resolve(baseDir, response["output-dir"], "LICENSE"),
-);
+
+await build(buildOptions);
+
+
+for (const file of response['files-to-copy']) {
+
+
+
+  Deno.copyFileSync(
+    resolve(baseDir, file),
+    resolve(baseDir, response["output-dir"], file),
+  );
+}
+
 
 
 console.info("Done!");

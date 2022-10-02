@@ -3,6 +3,8 @@
         "dev": "deno run -A --unstable --watch ./main.ts",
         "version": "deno run  -A https://deno.land/x/version/index.ts",
         "release": "deno task version patch && git push --tags origin main",
-        "vendor": "deno vendor --unstable --force main.ts"
+        "vendor": "deno vendor --unstable --force main.ts",
+        "install": "deno install -A --unstable --force --name=dnt ./main.ts",
+        "test": "deno test --no-check --unstable --allow-all --watch prompt.test.ts"
     }
 }
