@@ -1,5 +1,5 @@
 import { build, emptyDir } from "https://deno.land/x/dnt@0.30.0/mod.ts";
-import prompt_object from "https://deno.land/x/prompt_object@v1.0.4/prompt_object.ts"
+import prompt_object from "https://deno.land/x/prompt_object@v1.0.5/mod.ts"
 
 
 import { deepMerge } from "https://deno.land/std/collections/deep_merge.ts";
